@@ -8,7 +8,11 @@ namespace SA
     {
         private float vertical;
         private float horizontal;
-        private bool run;
+        private bool B_input, A_input, X_input, Y_input;
+
+        private bool RB_input, LB_input, RT_input, LT_input;
+        private float RT_axis, LT_axis;
+
 
         private StateManager state;
         private CameraManager camManager;
@@ -44,7 +48,21 @@ namespace SA
         {
             vertical = Input.GetAxis("Vertical");
             horizontal = Input.GetAxis("Horizontal");
-            run = Input.GetButton("RunInput");
+
+            B_input = Input.GetButton("B_input");
+            Y_input = Input.GetButtonUp("Y_input");
+
+            RT_input = Input.GetButton("RT_input");
+            RT_axis = Input.GetAxis("RT_input");
+            if (RT_axis != 0) RT_input = true;
+
+            LT_input = Input.GetButton("LT_input");
+            LT_axis = Input.GetAxis("LT_input");
+            if (LT_axis != 0) LT_input = true;
+
+            RB_input = Input.GetButton("RB_input");
+            LB_input = Input.GetButton("LB_input");
+
         }
 
         void UpdateStates()
@@ -58,13 +76,25 @@ namespace SA
             float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
             state.moveAmount = Mathf.Clamp01(m);
 
-            if(run)
+            if(B_input)
             {
                 state.run = state.moveAmount > 0;
             }
             else
             {
                 state.run = false;
+            }
+
+            state.RT = RT_input;
+            state.RB = RB_input;
+            state.LT = LT_input;
+            state.LB = LB_input;
+
+            if(Y_input)
+            {
+                Y_input = false;
+                state.twoHand = !state.twoHand;
+                state.TwoHandHandler();
             }
         }
     }

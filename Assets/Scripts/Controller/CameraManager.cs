@@ -42,9 +42,8 @@ namespace SA
 
             float targetSpeed = mouseSpeed;
 
-            /* For Controller
-            float c_h = Input.GetAxis("Right Axis X");
-            float c_v = Input.GetAxis("Right Axis Y");
+            float c_h = Input.GetAxis("RightAxis X");
+            float c_v = Input.GetAxis("RightAxis Y");
 
             if (c_h != 0 || c_v != 0)
             {
@@ -52,7 +51,7 @@ namespace SA
                 v = c_v;
                 targetSpeed = controllerSpeed;
             }
-            */
+
 
             FollowTarget(dt);
             HandleRotations(dt, v, h, targetSpeed);
@@ -86,7 +85,7 @@ namespace SA
             lookAngle += smoothX * targetSpeed;
             transform.rotation = Quaternion.Euler(0, lookAngle, 0);
 
-            titlAngle -= smoothY * targetSpeed;
+            titlAngle += smoothY * targetSpeed;
             titlAngle = Mathf.Clamp(titlAngle, minAngle, maxAngle);
             pivot.localRotation = Quaternion.Euler(titlAngle, 0, 0);
         }

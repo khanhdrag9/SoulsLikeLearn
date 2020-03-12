@@ -17,20 +17,27 @@ namespace SA
         public float runSpeed ;
         public float rotateSpeed;
         public float toGround = 0.5f;
+        public bool RT, RB, LT, LB;
 
         [Header("States")]
         public bool run;
         public bool onGround;
         public bool lockon;
+        public bool inAction;
+        public bool canMove;
+        public bool twoHand;
 
         [Header("Init")]
         public GameObject activeModel;
 
         public Animator animator { get; protected set; }
         public Rigidbody rigidbody { get; protected set; }
+        public AnimationHook animationHook { get; protected set; }
 
         public float delta { get; set; }
         [HideInInspector] public LayerMask ignoreLayers;
+
+        float _actionDelay;
 
         public void Init()
         {
@@ -39,6 +46,9 @@ namespace SA
             rigidbody.angularDrag = 999;
             rigidbody.drag = 4;
             rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+            animationHook = activeModel.AddComponent<AnimationHook>();
+            animationHook.Init(this);
 
             gameObject.layer = 8;
             ignoreLayers = ~(1 << 9);
@@ -68,6 +78,32 @@ namespace SA
         {
             delta = dt;
 
+            //if (canMove == false)
+            //    return;
+
+            DetectAction();
+
+            if (inAction)
+            {
+                animator.applyRootMotion = true;
+                _actionDelay += delta;
+                if(_actionDelay > 0.3f)
+                {
+                    inAction = false;
+                    _actionDelay = 0;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            canMove = animator.GetBool("canMove");
+            if (!canMove)
+                return;
+
+            animator.applyRootMotion = false;
+
             rigidbody.drag = moveAmount > 0 || onGround == false ? 0 : 4;
 
             float targetSpeed = moveSpeed;
@@ -85,7 +121,33 @@ namespace SA
             HandleRotation();
             HandleMovementAnimations();
         }
+        public void DetectAction()
+        {
+            if (canMove == false)
+                return;
 
+            if (RB == false && RT == false && LT == false && LB == false)
+                return;
+
+            string targetAnim = null;
+
+            if (RB)
+                targetAnim = "oh_attack_1";
+            if (RT)
+                targetAnim = "oh_attack_2";
+            if (LT)
+                targetAnim = "oh_attack_3";
+            if (LB)
+                targetAnim = "th_attack_1";
+
+            if (string.IsNullOrEmpty(targetAnim))
+                return;
+
+            canMove = false;
+            inAction = true;    
+            animator.CrossFade(targetAnim, 0.2f);
+            //rigidbody.velocity = Vector3.zero;
+        }
         public void Tick(float dt)
         {
             delta = dt;
@@ -130,6 +192,11 @@ namespace SA
             Debug.DrawRay(origin, dir * dis, Color.red);
 
             return r;
+        }
+    
+        public void TwoHandHandler()
+        {
+            animator.SetBool("two_hand", twoHand);
         }
     }
 }
