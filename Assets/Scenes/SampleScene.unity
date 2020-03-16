@@ -130,10 +130,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 74609896}
-  - component: {fileID: 74609897}
-  - component: {fileID: 74609898}
   - component: {fileID: 74609899}
   - component: {fileID: 74609900}
+  - component: {fileID: 74609902}
+  - component: {fileID: 74609901}
+  - component: {fileID: 74609897}
+  - component: {fileID: 74609898}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -233,6 +235,50 @@ MonoBehaviour:
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &74609901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74609895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446a3500cb166294682b3dfbc97bd82e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curWeapon:
+    oneHand:
+    - input: 0
+      animation: oh_attack_1
+    - input: 1
+      animation: oh_attack_2
+    twoHand:
+    - input: 0
+      animation: th_attack_1
+    - input: 1
+      animation: th_attack_2
+--- !u!114 &74609902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74609895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee52b215bbfd9d4195a7f9c97e5264b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions:
+  - input: 0
+    animation: 
+  - input: 1
+    animation: 
+  - input: 2
+    animation: 
+  - input: 3
+    animation: 
 --- !u!4 &131775239 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -9042772588573301732, guid: 5a88d31fb73dd484684b232c0a7f441a,

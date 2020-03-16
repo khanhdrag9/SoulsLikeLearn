@@ -39,6 +39,8 @@ namespace SA
         public Animator animator { get; protected set; }
         public Rigidbody rigidbody { get; protected set; }
         public AnimationHook animationHook { get; protected set; }
+        public ActionManager actionManager { get; protected set; }
+        public Inventory inventory { get; protected set; }
 
         public float delta { get; set; }
         [HideInInspector] public LayerMask ignoreLayers;
@@ -55,6 +57,13 @@ namespace SA
 
             animationHook = activeModel.AddComponent<AnimationHook>();
             animationHook.Init(this);
+
+            inventory = GetComponent<Inventory>();
+            inventory.Init();
+
+            actionManager = GetComponent<ActionManager>();
+            actionManager.Init(this);
+
 
             gameObject.layer = 8;
             ignoreLayers = ~(1 << 9);
@@ -143,17 +152,7 @@ namespace SA
             if (RB == false && RT == false && LT == false && LB == false)
                 return;
 
-            string targetAnim = null;
-
-            if (RB)
-                targetAnim = "oh_attack_1";
-            if (RT)
-                targetAnim = "oh_attack_2";
-            if (LT)
-                targetAnim = "oh_attack_3";
-            if (LB)
-                targetAnim = "th_attack_1";
-
+            string targetAnim = actionManager.GetAction().animation;
             if (string.IsNullOrEmpty(targetAnim))
                 return;
 
@@ -256,6 +255,7 @@ namespace SA
         public void TwoHandHandler()
         {
             animator.SetBool("two_hand", twoHand);
+            actionManager.UpdateTwoHand();
         }
     }
 }
