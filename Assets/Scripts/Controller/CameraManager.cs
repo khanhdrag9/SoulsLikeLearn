@@ -11,7 +11,7 @@ namespace SA
         public float mouseSpeed = 2f;
         public float controllerSpeed = 7f;
         public Transform target;
-
+        public Transform lockonTarget;
 
         public Transform pivot { get; set; }
         public Transform camTrans { get; set; }
@@ -77,17 +77,28 @@ namespace SA
                 smoothY = h;
             }
 
-            if(lockon)
-            {
+            titlAngle += smoothY * targetSpeed;
+            titlAngle = Mathf.Clamp(titlAngle, minAngle, maxAngle);
+            pivot.localRotation = Quaternion.Euler(titlAngle, 0, 0);
+            
 
+            if (lockon && lockonTarget != null)                                                                             
+            {
+                Vector3 targetDir = lockonTarget.position - transform.position;
+                targetDir.Normalize();
+                //targetDir.y = 0;
+                if (targetDir == Vector3.zero)
+                    targetDir = transform.forward;
+                Quaternion targetRot = Quaternion.LookRotation(targetDir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, dt * 9);
+                lookAngle = transform.eulerAngles.y;
+                return;
             }
 
             lookAngle += smoothX * targetSpeed;
             transform.rotation = Quaternion.Euler(0, lookAngle, 0);
 
-            titlAngle += smoothY * targetSpeed;
-            titlAngle = Mathf.Clamp(titlAngle, minAngle, maxAngle);
-            pivot.localRotation = Quaternion.Euler(titlAngle, 0, 0);
+
         }
 
         public static CameraManager Instance;

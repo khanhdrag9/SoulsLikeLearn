@@ -12,6 +12,7 @@ namespace SA
 
         private bool RB_input, LB_input, RT_input, LT_input;
         private float RT_axis, LT_axis;
+        private bool R_input, L_input;
 
 
         private StateManager state;
@@ -63,8 +64,10 @@ namespace SA
             RB_input = Input.GetButton("RB_input");
             LB_input = Input.GetButton("LB_input");
 
+            R_input = Input.GetButtonDown("R_input");
+            L_input = Input.GetButtonDown("L_input");
         }
-
+         
         void UpdateStates()
         {
             state.horizontal = horizontal;
@@ -76,13 +79,14 @@ namespace SA
             float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
             state.moveAmount = Mathf.Clamp01(m);
 
+            state.rollInput = B_input;
             if(B_input)
             {
-                state.run = state.moveAmount > 0;
+                //state.run = state.moveAmount > 0;
             }
             else
             {
-                state.run = false;
+                //state.run = false;
             }
 
             state.RT = RT_input;
@@ -95,6 +99,22 @@ namespace SA
                 Y_input = false;
                 state.twoHand = !state.twoHand;
                 state.TwoHandHandler();
+            }
+
+            if(R_input)
+            {
+                R_input = false;
+                state.lockon = !state.lockon;
+                if (state.lockonTarget == null)
+                {
+                    state.lockon = false;
+                    camManager.lockon = false;
+                }
+                else
+                { 
+                    camManager.lockonTarget = state.lockonTarget.transform;
+                    camManager.lockon = state.lockon;
+                }
             }
         }
     }

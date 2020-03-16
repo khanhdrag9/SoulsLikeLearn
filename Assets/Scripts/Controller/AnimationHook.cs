@@ -8,6 +8,7 @@ namespace SA
     {
         Animator animator;
         StateManager state;
+        public float rm_mul;
 
         public void Init(StateManager st)
         {
@@ -21,11 +22,12 @@ namespace SA
                 return;
 
             state.rigidbody.drag = 0;
-            float multi = 1;
+            if (rm_mul == 0)
+                rm_mul = 1;
 
             Vector3 dt = animator.deltaPosition;
             dt.y = 0;
-            Vector3 v = (dt * multi) / state.delta;
+            Vector3 v = (dt * rm_mul) / state.delta;
             state.rigidbody.velocity = v;
         }
 
