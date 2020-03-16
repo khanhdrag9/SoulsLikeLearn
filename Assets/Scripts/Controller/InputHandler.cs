@@ -52,6 +52,7 @@ namespace SA
 
             B_input = Input.GetButton("B_input");
             Y_input = Input.GetButtonUp("Y_input");
+            X_input = Input.GetButtonDown("X_input");
 
             RT_input = Input.GetButton("RT_input");
             RT_axis = Input.GetAxis("RT_input");
@@ -79,6 +80,7 @@ namespace SA
             float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
             state.moveAmount = Mathf.Clamp01(m);
 
+            state.itemInput = X_input;
             state.rollInput = B_input;
             if(B_input)
             {

@@ -13,6 +13,7 @@ namespace SA
         public Vector3 moveDirection;
         public bool rollInput;
         public bool RT, RB, LT, LB;
+        public bool itemInput;
 
         [Header("Stats")]
         public float moveSpeed ;
@@ -28,6 +29,7 @@ namespace SA
         public bool inAction;
         public bool canMove;
         public bool twoHand;
+        public bool isUsingItem;
        
 
         [Header("Init")]
@@ -35,6 +37,7 @@ namespace SA
 
         [Header("Other")]
         public EnemyTarget lockonTarget;
+        public GameObject rightHandWeapon;
 
         public Animator animator { get; protected set; }
         public Rigidbody rigidbody { get; protected set; }
@@ -89,6 +92,7 @@ namespace SA
             if (animator == null)
                 animator = activeModel.GetComponent<Animator>();
         }
+
         public void FixedTick(float dt)
         {
             delta = dt;
@@ -96,7 +100,16 @@ namespace SA
             //if (canMove == false)
             //    return;
 
+            if (isUsingItem)
+            {
+                bool interact = animator.GetBool("interacting");
+                if (interact == false) isUsingItem = false;
+            }
+
+            DetectItemAction();
             DetectAction();
+
+            rightHandWeapon.SetActive(!isUsingItem);
 
             if (inAction)
             {
@@ -116,6 +129,11 @@ namespace SA
             canMove = animator.GetBool("canMove");
             if (!canMove)
                 return;
+
+            if(isUsingItem)
+            {
+                moveAmount = Mathf.Clamp(moveAmount, 0, 0.42f);
+            }
 
             animationHook.rm_mul = 1;
             HandleRolls();
@@ -144,9 +162,26 @@ namespace SA
             else
                 HandleMovementAnimations();
         }
+
+        public void DetectItemAction()
+        {
+            if (canMove == false || itemInput == false || inAction)
+                return;
+
+            if (actionManager.currentItem == null)
+                return;
+
+            string targetAnim = actionManager.currentItem.animation;
+            if (string.IsNullOrEmpty(targetAnim))
+                return;
+
+            isUsingItem = true;
+            animator.Play(targetAnim);
+        }
+
         public void DetectAction()
         {
-            if (canMove == false)
+            if (canMove == false || isUsingItem)
                 return;
 
             if (RB == false && RT == false && LT == false && LB == false)
@@ -171,7 +206,7 @@ namespace SA
 
         public void HandleRolls()
         {
-            if (rollInput == false) return;
+            if (rollInput == false || isUsingItem) return;
 
             float v = vertical;
             float h = horizontal;

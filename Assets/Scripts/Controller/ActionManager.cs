@@ -11,6 +11,13 @@ namespace SA
         public string animation;
     }
 
+    [System.Serializable]
+    public class ItemAction
+    {
+        public string animation;
+        public string itemId;
+    }
+
     public enum InputType
     {
         RB, RT, LB, LT, COUNT
@@ -19,6 +26,7 @@ namespace SA
     public class ActionManager : MonoBehaviour
     {
         public List<InputAction> actions;
+        public ItemAction currentItem;
 
         private StateManager state;
 

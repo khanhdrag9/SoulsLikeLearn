@@ -216,22 +216,27 @@ MonoBehaviour:
   horizontal: 0
   moveAmount: 0
   moveDirection: {x: 0, y: 0, z: 0}
-  moveSpeed: 5
-  runSpeed: 10
-  rotateSpeed: 9
-  toGround: 0.5
+  rollInput: 0
   RT: 0
   RB: 0
   LT: 0
   LB: 0
+  itemInput: 0
+  moveSpeed: 5
+  runSpeed: 10
+  rotateSpeed: 9
+  toGround: 0.5
+  rollSpeed: 0
   run: 0
   onGround: 0
   lockon: 0
   inAction: 0
   canMove: 0
   twoHand: 0
+  isUsingItem: 0
   activeModel: {fileID: 0}
   lockonTarget: {fileID: 1720219068}
+  rightHandWeapon: {fileID: 776229719}
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -279,6 +284,9 @@ MonoBehaviour:
     animation: 
   - input: 3
     animation: 
+  currentItem:
+    animation: bestus
+    itemId: bestus
 --- !u!4 &131775239 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -9042772588573301732, guid: 5a88d31fb73dd484684b232c0a7f441a,
@@ -1181,6 +1189,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &776229719 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: c28b9efe8132caa4db205877e67d5688,
+    type: 3}
+  m_PrefabInstance: {fileID: 295204297}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
